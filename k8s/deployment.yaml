@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: andela-interview-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: andela-interview-api
+  template:
+    metadata:
+      labels:
+        app: andela-interview-api
+    spec:
+      containers:
+        - name: andela-interview-api
+          image: gaiyadev/andela-interview-api:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: app-config
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: JWT_SECRET
+
+
